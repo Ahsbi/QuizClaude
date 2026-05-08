@@ -42,6 +42,7 @@ export default function ResultScreen() {
   }, [state.score]);
 
   async function fetchLeaderboard() {
+    if (!supabase) return;
     setLoadingBoard(true);
     const { data } = await supabase
       .from('leaderboard')
@@ -54,6 +55,7 @@ export default function ResultScreen() {
   }
 
   async function handleSaveScore() {
+    if (!supabase) return;
     const name = playerName.trim();
     if (!name) return;
     setSaving(true);
@@ -119,8 +121,8 @@ export default function ResultScreen() {
           </button>
         </div>
 
-        {/* Leaderboard */}
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+        {/* Leaderboard — only shown when Supabase is configured */}
+        {supabase && <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
           <div className="px-5 pt-5 pb-4 space-y-3">
             <h2 className="text-sm font-semibold text-gray-200">Entrar no ranking</h2>
 
@@ -192,7 +194,7 @@ export default function ResultScreen() {
               </div>
             </div>
           )}
-        </div>
+        </div>}
 
         {/* Wrong answers */}
         {wrongQuestions.length > 0 && (
